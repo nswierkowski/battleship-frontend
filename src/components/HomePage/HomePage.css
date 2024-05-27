@@ -79,3 +79,6 @@ hr.vertical-line {
     text-align: right;
 }
 
+button {
+    cursor: pointer;
+}

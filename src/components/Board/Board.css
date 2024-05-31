@@ -16,6 +16,7 @@
     vertical-align: middle;
     cursor: pointer;
     background-color: #EBEBEB;
+    position: relative;
 }
  
 .axes-description {
@@ -28,4 +29,23 @@
     cursor: pointer;
     font-weight: bold;
     font-size: 1.75em;
+}
+
+
+.table-field.drag-over {
+    background-color: #00FF56;
+}
+
+.table-field.invalid-drag-over {
+    background-color: lightcoral;
+}
+
+.table-field.ship {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #606060;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #929292;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }

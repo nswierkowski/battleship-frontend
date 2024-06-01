@@ -1,0 +1,84 @@
+
+.homepage {
+    font-family: 'Bangers';
+    text-align: center;
+    background-color: #3C3C3C;
+    padding: 10px;
+}
+
+.homepage h1{
+    font-size: 36px;
+    color: #00FF56;
+}
+
+.homepage input{
+    font-family: 'Bangers';
+    font-size: 20px;
+    height: 30px;
+    width: 300px;
+    padding-left: 10px;
+}
+
+.homepage input::placeholder{
+    color:#C0C0C0;
+}
+
+hr.vertical-line {
+    display: inline-block;
+    border: none;
+    border-left: 1px solid black; 
+    height: 350px; 
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#start-game-panel{
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 70px;
+}
+#ranking {
+    width: 300px;
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+    color: white;
+}
+
+
+
+.start-form-elem {
+    display:block;
+}
+
+.start-form-elem .icon{
+    margin-right: 10px;
+    font-size: 24px; 
+    vertical-align: middle;
+}
+
+.homepage button {
+    font-family: 'Bangers';
+    color: white;
+    background-color: #3CC330;
+    border-radius: 3px;
+    border: solid black 1px;
+    font-size: 20px;
+    height: 50px;
+    width: 315px;
+    padding-left: 10px;
+    margin-top: 30px;
+}
+#ranking td{
+    padding-top: 5px;
+}
+
+.ranking-wins{
+    color:#00FF56;
+    width: 200px;
+    text-align: right;
+}
+
+button {
+    cursor: pointer;
+}

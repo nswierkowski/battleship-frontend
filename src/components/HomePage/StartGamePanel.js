@@ -83,7 +83,7 @@ function StartGamePanel() {
 
     return (
         <div className="homepage" id="start-game-panel">
-            <input id="nickname" class="start-form-elem" placeholder="Enter your nickname"></input>
+            <input id="nickname" className="start-form-elem" placeholder="Enter your nickname"></input>
             <button className="start-form-elem" onClick={connectToPlayer}> <BsPersonFill className="icon"/><span>Play vs random player</span></button>
             <button className="start-form-elem" onClick={connectToRobot}> <BsRobot className="icon"/><span>Play vs robot</span></button>
         </div>

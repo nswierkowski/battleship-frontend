@@ -15,18 +15,18 @@ function HomePage() {
   }, []);
 
     return(
-        <body class="homepage">
+        <div className="homepage">
             <div>
                 <h1>Battleship online</h1>
             </div>
             <div id="start-panels-container">
             <div id="start-panels">
                 <StartGamePanel/>
-                <hr class="vertical-line"/>
+                <hr className="vertical-line"/>
                 <Ranking/>
             </div>
             </div>
-        </body>
+        </div>
     );
 };
 

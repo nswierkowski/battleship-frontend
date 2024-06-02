@@ -1,0 +1,30 @@
+.single-ship-square {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #606060;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #929292;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.prefix-ship-square {
+    width: 50px;
+    height: 50px;
+    border: 0px solid #000;
+    text-align: center;
+    color: #3CC330;
+    vertical-align: middle;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.75em;
+}
+
+.ship-container {
+    display: flex;
+    justify-content: center;
+}
+
+.dragging {
+    opacity: 0.5;
+}

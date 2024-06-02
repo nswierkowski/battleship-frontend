@@ -1,0 +1,93 @@
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00FF56; 
+    margin-bottom: 1em; 
+}
+
+.board-ship-container {
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.space {
+    margin-left: 20px; 
+    margin-right: 20px; 
+}
+
+.main-page-container {
+    background-color: #3C3C3C;
+}
+
+.description-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: left; 
+}
+
+.description-text {
+    color: white;
+    margin-top: 10px;
+}
+
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.clickable-text {
+    cursor: pointer;
+    color: #00FF56;
+    margin-right: 5em; 
+    transition: color 0.3s;
+    font-weight: bold;
+    font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.125);
+    font-size: 24px;
+}
+
+.clickable-text:hover {
+    color: #309C26;
+}
+
+.clickable-text:last-child {
+    margin-right: 0; 
+}
+
+.play-button {
+    display: flex;
+    align-items: center;
+    background-color: #00FF56; 
+    color: white; 
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    width: 5em; 
+    margin-top: 1em;
+}
+
+.play-button:hover {
+    background-color: #309C26; 
+}
+
+.play-icon {
+    margin-left: 10px;
+}

@@ -1,4 +1,5 @@
 .header-container {
+    font-family: 'Bangers';
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,6 +31,7 @@
 }
 
 .description-text {
+    font-family: 'Bangers';
     color: white;
     margin-top: 10px;
 }
@@ -53,7 +55,7 @@
     margin-right: 5em; 
     transition: color 0.3s;
     font-weight: bold;
-    font-family: 'Comic Sans MS', 'Comic Sans', sans-serif;
+    font-family: 'Bangers';
     text-shadow: 1px 1px rgba(0, 0, 0, 0.125);
     font-size: 24px;
 }

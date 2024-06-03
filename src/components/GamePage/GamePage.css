@@ -1,0 +1,43 @@
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00FF56; 
+    margin-bottom: 1em; 
+    font-size: 36px;
+}
+
+.boards-container {
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.board-title {
+    font-family: 'Bangers';
+    color: white;
+    align-items: center;
+    justify-content: center;
+}
+
+.board-section {
+    display: flex;           
+    flex-direction: column;  
+    justify-content: center; 
+    align-items: center;             
+    text-align: center;      
+    margin: auto; 
+}
+
+.main-page-color {
+    font-family: 'Bangers';
+    background-color: #3C3C3C;
+}
+
+.board-title {
+    font-family: 'Bangers';
+    color: white;
+    align-items: center;
+    justify-content: center;
+}

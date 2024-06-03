@@ -3,10 +3,13 @@ import { BsPersonFill } from "react-icons/bs";
 import { BsRobot } from "react-icons/bs";
 import {Client} from '@stomp/stompjs';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const BASE_URL = 'http://localhost:8080';
 
 function StartGamePanel() {
+
+    const navigate = useNavigate();
 
     const connectToSocket = (gameId, playerType) => {
         console.log("connecting to the game");
@@ -18,6 +21,7 @@ function StartGamePanel() {
                 console.log('connected to the frame: ' + frame);
                 console.log(gameId);
                 console.log(playerType);
+                navigate('/setup');
                 /*
                 client.subscribe(`/topic/${gameId}/board/${playerType}`, (message) => {
                     const data = JSON.parse(message.body);

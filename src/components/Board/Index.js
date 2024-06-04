@@ -1,6 +1,9 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import './Board.css';
 import BoardField from './BoardField';
+import errorPuttingSound from '../../assets/put-ship-error.mp3';
+import puttingSound from '../../assets/put-ship-on-board.flac';
+
 
 const Board = forwardRef(({ setShipsCount }, ref) =>  {
     const boardSize = 10;
@@ -78,11 +81,15 @@ const Board = forwardRef(({ setShipsCount }, ref) =>  {
 
             setBoard(newBoard);
             setShipOrientations(orientations);
+        },
+        getBoard() {
+            return board;
         }
     }));
 
     const handleDrop = (rowIndex, colIndex, widgetType) => {
         if (!isValidPlacement) {
+            console.log("Err");
             setShipsCount(prevShipsCount => {
                 const newShipCount = { ...prevShipsCount };
                 if (newShipCount[widgetType] > 0) {
@@ -96,6 +103,7 @@ const Board = forwardRef(({ setShipsCount }, ref) =>  {
             return;
         }
 
+        new Audio(puttingSound).play();
         const newBoard = [...board];
         if (draggedShip) {
             const { row, col, length, orientation } = draggedShip;

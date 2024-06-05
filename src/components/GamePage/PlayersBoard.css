@@ -49,3 +49,25 @@
     background-color: #929292;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+
+.hit-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #B70F0A;
+    margin: auto; 
+}
+
+.hit-ship-field {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #B70F0A;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #929292;
+    position: relative;
+
+}
+.hit-ship {
+    color:#B70F0A;
+}

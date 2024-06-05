@@ -2,25 +2,28 @@ import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import '../PlayersBoard.css';
 import OpponentBoardField from './OpponentBoardField';
 import CellCategory from '../CellCategories';
+import { makeMove } from '../../../services/Controller';
 
-function OpponentBoard ({playerBoard}) {
+function OpponentBoard ({playerBoard, gameId, playerType}) {
     const boardSize = 10;
     const letterCoordinatesStart = 65;
 
     const initialBoard = [ //Treat this board as a mockup
         [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, 1,    1,    1,    null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, 1,    1,    1,    1,    1,    null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, 1,    1,    1,    null, null, null, 1,    1,    null],
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null],
-        [1,    1,    1,    1,    null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null]
       ];
 
     const letterCoordinates = Array(boardSize).fill(null).map((_, index) => String.fromCharCode(letterCoordinatesStart + index));
+
+    const [moveResults, setMoveResults] = useState({}); 
 
     const boardToPlayerBoard = (board) => {
       return board.map(row => row.map(cell => {
@@ -30,6 +33,16 @@ function OpponentBoard ({playerBoard}) {
         return CellCategory.EMPTY;
       }))
     };
+
+    const performMove = async (rowIndex, colIndex) => {
+        console.log(`perform move Opponent Board ${rowIndex}, ${colIndex}`);
+        const moveResponse = await makeMove(gameId, playerType, rowIndex, colIndex);
+        const newResults = { ...moveResults, [`${rowIndex}-${colIndex}`]: moveResponse.result };
+        setMoveResults(newResults);
+       
+        
+    };
+   
 
     
     const [board, setBoard] = useState(boardToPlayerBoard(initialBoard));
@@ -53,6 +66,11 @@ function OpponentBoard ({playerBoard}) {
                                     cell={cell}
                                     colIndex={colIndex}
                                     rowIndex={rowIndex}
+                                    gameId={gameId}
+                                    playerType={playerType}
+                                    onClickAction={()=>performMove(rowIndex,colIndex)}
+                                    result={moveResults[`${rowIndex}-${colIndex}`]}
+
                                 />
                             ))}
                         </tr>

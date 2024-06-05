@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../PlayersBoard.css';
 import PlayerBoardField from './PlayerBoardField';
 import CellCategory from '../CellCategories';
 
-function PlayerBoard({ playerBoard }) {
+
+function PlayerBoard({ playerBoard, moveResults}) {
     const boardSize = 10;
     const letterCoordinatesStart = 65;
 
@@ -20,6 +21,7 @@ function PlayerBoard({ playerBoard }) {
 
     const [board, setBoard] = useState(boardToPlayerBoard(playerBoard));
     const [shipsNumber, setShipsNumber] = useState(5);
+   
 
     return (
         <>
@@ -39,6 +41,7 @@ function PlayerBoard({ playerBoard }) {
                                         cell={cell}
                                         colIndex={colIndex}
                                         rowIndex={rowIndex}
+                                        result={moveResults[`${rowIndex}-${colIndex}`]}
                                     />
                                 ))}
                             </tr>

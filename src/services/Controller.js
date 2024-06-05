@@ -26,7 +26,7 @@ const connectToSocket = (gameId, playerType, navigate) => {
             client.subscribe(`/topic/${gameId}/${playerType}`, (message) => {
                 const data = JSON.parse(message.body);
                 console.log("Move update received: ", data);
-                //obsluga
+                
             });*/
         },
         onStompError: (frame) => {
@@ -91,4 +91,26 @@ export const postBoard = async (board, gameId, playerType) => {
         console.log(error);
         return undefined;
     }
+
+   
 }
+
+export const makeMove = async (gameId, playerType, rowIndex, colIndex) => {
+    try {
+        const response = await axios.post(`${BASE_URL}/post/move`, {
+            coord: {
+                x: colIndex, 
+                y: rowIndex, 
+            },
+            playerType: playerType,
+            gameID: gameId
+        });
+        
+        const data = response.data;
+        console.log("CONTROLLER perform move");
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+};

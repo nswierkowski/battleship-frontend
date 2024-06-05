@@ -1,9 +1,12 @@
 import Board from "../Board/Index";
-import "./ArrangeBoard.css"
-import { useState, useRef } from 'react'
+import "./ArrangeBoard.css";
+import { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import AvalaibleShips from "./AvalaibleShips/Index"
+import AvalaibleShips from "./AvalaibleShips/Index";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { postBoard } from "../../services/Controller";
+import NotAllShipedPlacedPopup from "./NotAllShipedPlacedPopup/Index";
 
 function ArrangeBoard() {
     const shipsDefaultCount = {
@@ -12,12 +15,51 @@ function ArrangeBoard() {
         4: 1,
         5: 1,
     };
-    
-    const [shipsCount, setShipsCount] = useState(shipsDefaultCount);
-    const boardRef = useRef();
 
-    const playButtonClick = () => {
-        //TODO: SEND BOARD TO BACKEND
+    const [shipsCount, setShipsCount] = useState(shipsDefaultCount);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const location = useLocation();
+    const boardRef = useRef();
+    const navigate = useNavigate();
+
+    const boardToSendingFormat = () => {
+        return boardRef.current.getBoard().map((row) =>
+            row.map((cell) => (cell === '1' ? 1 : 0))
+        );
+    };
+
+    const playButtonClick = async () => {
+        if (Object.values(shipsCount).reduce((total, count) => total + count, 0) !== 0) {
+            setIsModalOpen(true);
+            return;
+        }
+
+        const gameId = location.state.gameId;
+        const playerType = location.state.type;
+        const board = boardToSendingFormat();
+
+        console.log(`ARRANGE BOARD GAME ID: ${location.state.gameId}`);
+        console.log(`ARRANGE BOARD Player type: ${location.state.type}`);
+
+        try {
+            const gameReady = await postBoard(board, gameId, playerType);
+            console.log(`Game ready: ${gameReady}`);
+            if (gameReady === undefined) {
+                alert("Website failed. Try refresh");
+            } else if (gameReady) {
+                navigate("../gamepage", {
+                    replace: true,
+                    state: { gameId: gameId, type: playerType, board: board }
+                });
+            } else {
+                navigate("../waiting-room", {
+                    replace: true,
+                });
+            }
+        } catch (error) {
+            console.error("Error posting board:", error);
+            alert("An error occurred. Please try again.");
+        }
     }
 
     const handleReset = () => {
@@ -30,11 +72,15 @@ function ArrangeBoard() {
             acc[key] = 0;
             return acc;
         }, {});
-    
+
         setShipsCount(emptyShipsCount);
         boardRef.current.resetBoard();
         boardRef.current.placeShipsRandomly();
     }
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div className="main-page-container">
@@ -61,6 +107,11 @@ function ArrangeBoard() {
                 <h2 className="description-text">DRAG AND DROP THE SHIPS</h2>
                 <h2 className="description-text">CLICK ON THE SHIP ON THE BOARD TO CHANGE DIRECTION</h2>
             </div>
+            {isModalOpen && (
+                <NotAllShipedPlacedPopup onClose={closeModal}>
+                    <h2 className="description-text">Please place all ships on the board before proceeding.</h2>
+                </NotAllShipedPlacedPopup>
+            )}
         </div>
     );
 };

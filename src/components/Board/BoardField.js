@@ -1,5 +1,7 @@
 import React from 'react';
 import './Board.css';
+import errorPuttingSound from '../../assets/put-ship-error.mp3';
+
 
 function BoardField({ cell, colIndex, rowIndex, onDrop, onHighlight, onUnhighlight, isHighlighted, isValidPlacement, setShipsCount, onDragStart, onClick }) {
 
@@ -20,6 +22,7 @@ function BoardField({ cell, colIndex, rowIndex, onDrop, onHighlight, onUnhighlig
     const handleDrop = (e) => {
         e.preventDefault();
         if (!isValidPlacement) {
+            new Audio(errorPuttingSound).play();
             return;
         }
         const shipLength = parseInt(e.dataTransfer.getData("widgetType"), 10);

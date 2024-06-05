@@ -1,0 +1,17 @@
+.waiting-room-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #3C3C3C;
+}
+
+.header-container {
+    font-family: 'Bangers';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00FF56;
+    margin-bottom: 1em;
+}

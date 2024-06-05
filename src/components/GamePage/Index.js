@@ -4,6 +4,7 @@ import OpponentBoard from './OpponentBoard/Index';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Client } from '@stomp/stompjs'; 
+import { makeMove } from '../../services/Controller';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -23,8 +24,8 @@ function GamePage() {
         }
     }, [location.state]);
 
-
-    const [moveResults, setMoveResults] = useState({}); 
+    const [myTurn, setMyTurn] = useState(true); 
+    const [opponentMoveResults, setOpponentMoveResults] = useState({}); 
 
     useEffect(() => {
         const socket = new WebSocket(BASE_URL.replace('http', 'ws') + '/websocket');
@@ -38,7 +39,8 @@ function GamePage() {
                     console.log("Move update received: ", data);
                     const rowIndex = data.coord.y;
                     const colIndex = data.coord.x;
-                    setMoveResults(prevMoveResults => ({ ...prevMoveResults, [`${rowIndex}-${colIndex}`]: data.result }));
+                    setOpponentMoveResults(prevMoveResults => ({ ...prevMoveResults, [`${rowIndex}-${colIndex}`]: data.result }));
+                    setMyTurn(true);
                 });
             },
             onStompError: (frame) => {
@@ -54,17 +56,33 @@ function GamePage() {
         };
     }, [gameId, playerType]); 
 
+    const [moveResults, setMoveResults] = useState({}); 
+
+    const performMove = async (rowIndex, colIndex) => {
+        if(myTurn){
+            console.log(`perform move Opponent Board ${rowIndex}, ${colIndex}`);
+           
+            const moveResponse = await makeMove(gameId, playerType, rowIndex, colIndex);
+            const newResults = { ...moveResults, [`${rowIndex}-${colIndex}`]: moveResponse.result };
+            setMoveResults(newResults);
+            setMyTurn(false);
+        }
+        else{
+            console.log("Not your turn");
+        }
+    };
+
     return (
         <div className='main-page-color'>
             <h1 className='header-container'>Your turn!</h1>
             <div className="boards-container">
                 <div className="board-section">
                     <h1 className='board-title'>Player board</h1>
-                    <PlayerBoard playerBoard={playerBoard} moveResults={moveResults}/>
+                    <PlayerBoard playerBoard={playerBoard} moveResults={opponentMoveResults}/>
                 </div>
                 <div className="board-section">
                     <h1 className='board-title'>{`${opponentNicknameMock}'s board`}</h1>
-                    <OpponentBoard board={null} gameId={gameId} playerType={playerType}/>
+                    <OpponentBoard board={null} performMove={performMove} moveResults={moveResults}/>
                 </div>
             </div>
         </div>

@@ -2,9 +2,9 @@ import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import '../PlayersBoard.css';
 import OpponentBoardField from './OpponentBoardField';
 import CellCategory from '../CellCategories';
-import { makeMove } from '../../../services/Controller';
 
-function OpponentBoard ({playerBoard, gameId, playerType}) {
+
+function OpponentBoard ({playerBoard, performMove, moveResults}) {
     const boardSize = 10;
     const letterCoordinatesStart = 65;
 
@@ -23,7 +23,7 @@ function OpponentBoard ({playerBoard, gameId, playerType}) {
 
     const letterCoordinates = Array(boardSize).fill(null).map((_, index) => String.fromCharCode(letterCoordinatesStart + index));
 
-    const [moveResults, setMoveResults] = useState({}); 
+   
 
     const boardToPlayerBoard = (board) => {
       return board.map(row => row.map(cell => {
@@ -34,17 +34,7 @@ function OpponentBoard ({playerBoard, gameId, playerType}) {
       }))
     };
 
-    const performMove = async (rowIndex, colIndex) => {
-        console.log(`perform move Opponent Board ${rowIndex}, ${colIndex}`);
-        const moveResponse = await makeMove(gameId, playerType, rowIndex, colIndex);
-        const newResults = { ...moveResults, [`${rowIndex}-${colIndex}`]: moveResponse.result };
-        setMoveResults(newResults);
-       
-        
-    };
-   
-
-    
+  
     const [board, setBoard] = useState(boardToPlayerBoard(initialBoard));
     const [shipsNumber, setShipsNumber] = useState(5);
 
@@ -66,8 +56,6 @@ function OpponentBoard ({playerBoard, gameId, playerType}) {
                                     cell={cell}
                                     colIndex={colIndex}
                                     rowIndex={rowIndex}
-                                    gameId={gameId}
-                                    playerType={playerType}
                                     onClickAction={()=>performMove(rowIndex,colIndex)}
                                     result={moveResults[`${rowIndex}-${colIndex}`]}
 

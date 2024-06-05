@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Client } from '@stomp/stompjs';
-import { useNavigate } from 'react-router-dom';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -18,7 +17,9 @@ const connectToSocket = (gameId, playerType, navigate) => {
             
             client.subscribe(`/topic/${gameId}/board/${playerType}`, (message) => {
                 const data = JSON.parse(message.body);
-                navigate('/gamepage', { state: { gameId: gameId, type: playerType, boardData: data } });
+                const board = data.board; 
+                console.log(`board: ${board}`);
+                navigate('/gamepage', { state: { gameId: gameId, type: playerType, board: board } });            
             });
 
             /*
@@ -67,13 +68,13 @@ export const connectToGame = async (mode, navigate) => {
     }
 }
 
-export const postBoard = async (board, gameId, playerType, navigate) => {
+export const postBoard = async (board, gameId, playerType) => {
     try {
-        console.log(BASE_URL + "/post/connect")
+        console.log(`${BASE_URL}/post/board`)
         const response = await axios.post(`${BASE_URL}/post/board`, {
             board: board,
-            player: playerType,
-            gameId: gameId
+            gameID: gameId,
+            playerType: playerType
         }, {
             headers: {
                 'Content-Type': 'application/json'
@@ -81,11 +82,10 @@ export const postBoard = async (board, gameId, playerType, navigate) => {
         });
 
         const data = response.data;
-        //TODO: Assert the response will be singular boolean value
         const gameReady = data.result;
-        console.log(gameId);
-        console.log(playerType);
-        console.log(gameReady);
+        console.log(`CONTROLLER GAME ID ${gameId}`);
+        console.log(`CONTROLLER Player type ${playerType}`);
+        console.log(`CONTROLLER gameReady ${gameReady}`);
         return gameReady;
     } catch (error) {
         console.log(error);

@@ -38,8 +38,8 @@ function ArrangeBoard() {
         const playerType = location.state.type;
         const board = boardToSendingFormat();
 
-        console.log(`GAME ID: ${location.state.gameId}`);
-        console.log(`Player type: ${location.state.type}`);
+        console.log(`ARRANGE BOARD GAME ID: ${location.state.gameId}`);
+        console.log(`ARRANGE BOARD Player type: ${location.state.type}`);
 
         try {
             const gameReady = await postBoard(board, gameId, playerType);

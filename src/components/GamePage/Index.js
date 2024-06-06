@@ -4,7 +4,7 @@ import OpponentBoard from './OpponentBoard/Index';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { Client } from '@stomp/stompjs'; 
-import { makeMove } from '../../services/Controller';
+import { makeMove, getOpponentName } from '../../services/Controller';
 import ModulPopup from '../ModulPopup/Index';
 
 const BASE_URL = 'http://localhost:8080';
@@ -23,20 +23,30 @@ function GamePage() {
     const [playerShipsNumber, setPlayerShipsNumber] = useState(defaultShipsNumber);
     const [opponentShipsNumber, setOpponentShipsNumber] = useState(defaultShipsNumber);
 
+    const [opponentNick, setOpponentNick] = useState("Opponent");
     const opponentNicknameMock = "Kamil";
+
+    const [myTurn, setMyTurn] = useState(playerType === "1");
+    const [opponentMoveResults, setOpponentMoveResults] = useState({});
+    const [moveResults, setMoveResults] = useState({});
+    const moveQueue = useRef([]);
 
     useEffect(() => {
         if (location.state && location.state.board) {
             setPlayerBoard(location.state.board);
             setGameId(location.state.gameId);
             setPlayerType(location.state.type);
+            console.log(`playerType ${location.state.type}`);
+
+            setMyTurn(location.state.type == 1);
+        }
+        if (location.state.opponentNickname) {
+            setOpponentNick(location.state.opponentNickname);
+        } else {
+            setOpponentNick(getOpponentName(gameId));
         }
     }, [location.state]);
 
-    const [myTurn, setMyTurn] = useState(true);
-    const [opponentMoveResults, setOpponentMoveResults] = useState({});
-    const [moveResults, setMoveResults] = useState({});
-    const moveQueue = useRef([]);
 
     useEffect(() => {
         const socket = new WebSocket(BASE_URL.replace('http', 'ws') + '/websocket');
@@ -140,7 +150,7 @@ function GamePage() {
                     <PlayerBoard playerBoard={playerBoard} moveResults={opponentMoveResults} currentShipsNumber={playerShipsNumber}/>
                 </div>
                 <div className="board-section">
-                    <h1 className='board-title'>{`${opponentNicknameMock}'s board`}</h1>
+                    <h1 className='board-title'>{`${opponentNick}'s board`}</h1>
                     <OpponentBoard board={null} performMove={performMove} moveResults={moveResults} currentShipsNumber={opponentShipsNumber}/>
                 </div>
             </div>

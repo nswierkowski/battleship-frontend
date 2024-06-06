@@ -36,6 +36,7 @@ function ArrangeBoard() {
 
         const gameId = location.state.gameId;
         const playerType = location.state.type;
+        const opponentNickname = location.state.opponentNickname;
         const board = boardToSendingFormat();
 
         console.log(`ARRANGE BOARD GAME ID: ${location.state.gameId}`);
@@ -49,7 +50,7 @@ function ArrangeBoard() {
             } else if (gameReady) {
                 navigate("../gamepage", {
                     replace: true,
-                    state: { gameId: gameId, type: playerType, board: board }
+                    state: { gameId: gameId, type: playerType, board: board, opponentNickname: opponentNickname }
                 });
             } else {
                 navigate("../waiting-room", {

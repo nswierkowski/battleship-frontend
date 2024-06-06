@@ -6,7 +6,7 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import AvalaibleShips from "./AvalaibleShips/Index";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { postBoard } from "../../services/Controller";
-import NotAllShipedPlacedPopup from "./NotAllShipedPlacedPopup/Index";
+import ModulPopup from "../ModulPopup/Index";
 
 function ArrangeBoard() {
     const shipsDefaultCount = {
@@ -108,9 +108,9 @@ function ArrangeBoard() {
                 <h2 className="description-text">CLICK ON THE SHIP ON THE BOARD TO CHANGE DIRECTION</h2>
             </div>
             {isModalOpen && (
-                <NotAllShipedPlacedPopup onClose={closeModal}>
+                <ModulPopup onClose={closeModal} buttonName={"Close"}>
                     <h2 className="description-text">Please place all ships on the board before proceeding.</h2>
-                </NotAllShipedPlacedPopup>
+                </ModulPopup>
             )}
         </div>
     );

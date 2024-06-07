@@ -4,7 +4,7 @@ import PlayerBoardField from './PlayerBoardField';
 import CellCategory from '../CellCategories';
 
 
-function PlayerBoard({ playerBoard, moveResults}) {
+function PlayerBoard({ playerBoard, moveResults, currentShipsNumber}) {
     const boardSize = 10;
     const letterCoordinatesStart = 65;
 
@@ -20,7 +20,6 @@ function PlayerBoard({ playerBoard, moveResults}) {
     };
 
     const [board, setBoard] = useState(boardToPlayerBoard(playerBoard));
-    const [shipsNumber, setShipsNumber] = useState(5);
    
 
     return (
@@ -49,7 +48,7 @@ function PlayerBoard({ playerBoard, moveResults}) {
                     </tbody>
                 </table>
             </div>
-            <h1 className='board-title'>{`${shipsNumber} ALIVE SHIPS`}</h1>
+            <h1 className='board-title'>{`${currentShipsNumber} ALIVE SHIPS`}</h1>
         </>
     );
 }

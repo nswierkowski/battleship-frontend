@@ -3,7 +3,9 @@ import { Client } from '@stomp/stompjs';
 
 const BASE_URL = 'http://localhost:8080';
 
-const connectToSocket = (gameId, playerType, navigate) => {
+const opponentNicknames = {}; 
+
+const connectToSocket = (gameId, playerType, opponentNickname, navigate) => {
     console.log("connecting to the game");
     const socket = new WebSocket(BASE_URL.replace('http', 'ws') + '/websocket');
     const client = new Client({
@@ -13,7 +15,7 @@ const connectToSocket = (gameId, playerType, navigate) => {
             console.log('connected to the frame: ' + frame);
             console.log(gameId);
             console.log(playerType);
-            navigate('/setup', { state: { gameId: gameId, type: playerType } });
+            navigate('/setup', { state: { gameId: gameId, type: playerType, opponentNickname: opponentNickname } });
             
             client.subscribe(`/topic/${gameId}/board/${playerType}`, (message) => {
                 const data = JSON.parse(message.body);
@@ -22,12 +24,12 @@ const connectToSocket = (gameId, playerType, navigate) => {
                 navigate('/gamepage', { state: { gameId: gameId, type: playerType, board: board } });            
             });
 
-            /*
-            client.subscribe(`/topic/${gameId}/${playerType}`, (message) => {
+            client.subscribe(`/topic/${gameId}/opponent/1`, (message) => {
                 const data = JSON.parse(message.body);
-                console.log("Move update received: ", data);
-                
-            });*/
+                console.log("---Opponent received: ", data);
+                const opponentNick = data.nickname;
+                opponentNicknames[gameId] = opponentNick;  
+            });
         },
         onStompError: (frame) => {
             console.error('Broker reported error: ' + frame.headers['message']);
@@ -38,10 +40,15 @@ const connectToSocket = (gameId, playerType, navigate) => {
     client.activate();
 }
 
+export const getOpponentName = (gameId) => {
+    return opponentNicknames[gameId] ? opponentNicknames[gameId] : "ROBOT"
+}
+
 export const connectToGame = async (mode, navigate) => {
     let nickname = document.getElementById("nickname").value;
     let gameId;
     let playerType;
+    let opponentNickname;
     if (nickname == null || nickname === '') {
         alert("Please enter your nickname");
     } else {
@@ -59,9 +66,10 @@ export const connectToGame = async (mode, navigate) => {
             const data = response.data;
             gameId = data.gameID;
             playerType = data.playerType;
+            opponentNickname = data.opponent ? data.opponent.nickname : undefined;
             console.log(gameId);
             console.log(playerType);
-            connectToSocket(gameId, playerType, navigate);
+            connectToSocket(gameId, playerType, opponentNickname, navigate);
         } catch (error) {
             console.log(error);
         }
@@ -91,8 +99,6 @@ export const postBoard = async (board, gameId, playerType) => {
         console.log(error);
         return undefined;
     }
-
-   
 }
 
 export const makeMove = async (gameId, playerType, rowIndex, colIndex) => {

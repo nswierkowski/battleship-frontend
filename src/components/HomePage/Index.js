@@ -6,14 +6,6 @@ import Ranking from './Ranking';
 
 
 function HomePage() {
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css?family=Bangers';
-    link.rel = 'stylesheet';
-    document.head.appendChild(link);
-
-  }, []);
-
     return(
         <div className="homepage">
             <div>

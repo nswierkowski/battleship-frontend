@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Client } from '@stomp/stompjs'; 
 import { makeMove, getOpponentName } from '../../services/Controller';
 import ModulPopup from '../ModulPopup/Index';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -30,6 +31,31 @@ function GamePage() {
     const [opponentMoveResults, setOpponentMoveResults] = useState({});
     const [moveResults, setMoveResults] = useState({});
     const moveQueue = useRef([]);
+
+    const [jwtToken, setJwtToken] = useState('');
+
+    useEffect(() => {
+        const fetchToken = async () => {
+          try {
+            const {
+                tokens,
+                credentials,
+                identityId,
+                userSub
+              } = await fetchAuthSession();
+            
+              const {
+                idToken,
+                accessToken
+              } = tokens;
+            setJwtToken(accessToken);
+          } catch (error) {
+            console.error('Error fetching JWT token:', error);
+          }
+        };
+    
+        fetchToken();
+      }, []);
 
     useEffect(() => {
         if (location.state && location.state.board) {
@@ -98,7 +124,7 @@ function GamePage() {
             console.log(`perform move Opponent Board ${rowIndex}, ${colIndex}`);
             setMyTurn(false);
 
-            const moveResponse = await makeMove(gameId, playerType, rowIndex, colIndex);
+            const moveResponse = await makeMove(jwtToken, gameId, playerType, rowIndex, colIndex);
             moveQueue.current.push(() => handleMoveResponse(rowIndex, colIndex, moveResponse));
             processQueue();
         } else {

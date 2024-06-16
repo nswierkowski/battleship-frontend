@@ -1,12 +1,13 @@
 import Board from "../Board/Index";
 import "./ArrangeBoard.css";
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import AvalaibleShips from "./AvalaibleShips/Index";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { postBoard } from "../../services/Controller";
 import ModulPopup from "../ModulPopup/Index";
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 function ArrangeBoard() {
     const shipsDefaultCount = {
@@ -21,6 +22,31 @@ function ArrangeBoard() {
     const location = useLocation();
     const boardRef = useRef();
     const navigate = useNavigate();
+
+    const [jwtToken, setJwtToken] = useState('');
+
+    useEffect(() => {
+        const fetchToken = async () => {
+          try {
+            const {
+                tokens,
+                credentials,
+                identityId,
+                userSub
+              } = await fetchAuthSession();
+            
+              const {
+                idToken,
+                accessToken
+              } = tokens;
+            setJwtToken(accessToken);
+          } catch (error) {
+            console.error('Error fetching JWT token:', error);
+          }
+        };
+    
+        fetchToken();
+      }, []);
 
     const boardToSendingFormat = () => {
         return boardRef.current.getBoard().map((row) =>
@@ -43,7 +69,7 @@ function ArrangeBoard() {
         console.log(`ARRANGE BOARD Player type: ${location.state.type}`);
 
         try {
-            const gameReady = await postBoard(board, gameId, playerType);
+            const gameReady = await postBoard(jwtToken,board, gameId, playerType);
             console.log(`Game ready: ${gameReady}`);
             if (gameReady === undefined) {
                 alert("Website failed. Try refresh");

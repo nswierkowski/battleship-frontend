@@ -5,17 +5,16 @@ const BASE_URL = 'http://localhost:8080';
 
 const opponentNicknames = {}; 
 
-// const userPoolClientId = '4qevdb93e6o7nsp2m5i2h7crke';
-// const username = localStorage.getItem('CognitoIdentityServiceProvider.'+userPoolClientId+'.LastAuthUser');
-// const token = localStorage.getItem('CognitoIdentityServiceProvider.'+userPoolClientId+'.'+username+'.accessToken');
-
-
-const connectToSocket = (gameId, playerType, opponentNickname, navigate) => {
+const connectToSocket = (token, gameId, playerType, opponentNickname, navigate) => {
     console.log("connecting to the game");
+    console.log("Token: "+token);
     const socket = new WebSocket(BASE_URL.replace('http', 'ws') + '/websocket');
     const client = new Client({
         webSocketFactory: () => socket,
         reconnectDelay: 5000,
+        connectHeaders: {
+            'Authorization': `Bearer ${token}`
+        },
         onConnect: (frame) => {
             console.log('connected to the frame: ' + frame);
             console.log(gameId);
@@ -76,7 +75,7 @@ export const connectToGame = async (token, mode, navigate) => {
             opponentNickname = data.opponent ? data.opponent.nickname : undefined;
             console.log(gameId);
             console.log(playerType);
-            connectToSocket(gameId, playerType, opponentNickname, navigate);
+            connectToSocket(token,gameId, playerType, opponentNickname, navigate);
         } catch (error) {
             console.log(error);
         }

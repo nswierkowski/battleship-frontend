@@ -6,7 +6,7 @@ const SSOPanel = () => {
     const { user, signOut } = useAuthenticator((context) => [context.user]);
 
     return (
-        <div class='SSOPanel'>
+        <div className='SSOPanel'>
           <h1>Welcome, {user.username}</h1>
           <button onClick={signOut}>Sign Out</button>
         </div>

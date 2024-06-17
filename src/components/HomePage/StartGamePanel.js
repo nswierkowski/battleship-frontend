@@ -40,7 +40,7 @@ function StartGamePanel() {
                 idToken,
                 accessToken
               } = tokens;
-            setJwtToken(accessToken);
+            setJwtToken(idToken);
           } catch (error) {
             console.error('Error fetching JWT token:', error);
           }

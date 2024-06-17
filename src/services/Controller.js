@@ -5,12 +5,16 @@ const BASE_URL = 'http://localhost:8080';
 
 const opponentNicknames = {}; 
 
-const connectToSocket = (gameId, playerType, opponentNickname, navigate) => {
+const connectToSocket = (token, gameId, playerType, opponentNickname, navigate) => {
     console.log("connecting to the game");
+    console.log("Token: "+token);
     const socket = new WebSocket(BASE_URL.replace('http', 'ws') + '/websocket');
     const client = new Client({
         webSocketFactory: () => socket,
         reconnectDelay: 5000,
+        connectHeaders: {
+            'Authorization': `Bearer ${token}`
+        },
         onConnect: (frame) => {
             console.log('connected to the frame: ' + frame);
             console.log(gameId);
@@ -44,7 +48,7 @@ export const getOpponentName = (gameId) => {
     return opponentNicknames[gameId] ? opponentNicknames[gameId] : "ROBOT"
 }
 
-export const connectToGame = async (mode, navigate) => {
+export const connectToGame = async (token, mode, navigate) => {
     let nickname = document.getElementById("nickname").value;
     let gameId;
     let playerType;
@@ -54,12 +58,14 @@ export const connectToGame = async (mode, navigate) => {
     } else {
         try {
             console.log(BASE_URL + "/post/connect")
+            console.log("Token: "+token);
             const response = await axios.post(BASE_URL + "/post/connect", {
                 player: { nickname: nickname },
                 mode: mode
             }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -69,15 +75,16 @@ export const connectToGame = async (mode, navigate) => {
             opponentNickname = data.opponent ? data.opponent.nickname : undefined;
             console.log(gameId);
             console.log(playerType);
-            connectToSocket(gameId, playerType, opponentNickname, navigate);
+            connectToSocket(token,gameId, playerType, opponentNickname, navigate);
         } catch (error) {
             console.log(error);
         }
     }
 }
 
-export const postBoard = async (board, gameId, playerType) => {
+export const postBoard = async (token,board, gameId, playerType) => {
     try {
+        console.log("Token: "+token);
         console.log(`${BASE_URL}/post/board`)
         const response = await axios.post(`${BASE_URL}/post/board`, {
             board: board,
@@ -85,7 +92,8 @@ export const postBoard = async (board, gameId, playerType) => {
             playerType: playerType
         }, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -101,8 +109,9 @@ export const postBoard = async (board, gameId, playerType) => {
     }
 }
 
-export const makeMove = async (gameId, playerType, rowIndex, colIndex) => {
+export const makeMove = async (token,gameId, playerType, rowIndex, colIndex) => {
     try {
+        console.log("Token: "+token);
         const response = await axios.post(`${BASE_URL}/post/move`, {
             coord: {
                 x: colIndex, 
@@ -110,6 +119,10 @@ export const makeMove = async (gameId, playerType, rowIndex, colIndex) => {
             },
             playerType: playerType,
             gameID: gameId
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
         
         const data = response.data;
